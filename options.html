@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🌊 FocusFlow Settings</h1>
+            <p class="subtitle">Customize your browsing experience</p>
+        </header>
+
+        <main>
+            <section class="settings-section">
+                <h2>Page Declutter</h2>
+                <div class="setting-item">
+                    <label for="declutterAggressiveness">Declutter Aggressiveness</label>
+                    <select id="declutterAggressiveness" class="select-input">
+                        <option value="low">Low - Only obvious distractions</option>
+                        <option value="medium">Medium - Balanced (Recommended)</option>
+                        <option value="high">High - Maximum declutter</option>
+                    </select>
+                    <p class="setting-description">
+                        Controls how aggressively FocusFlow hides page elements. Higher settings may hide more content.
+                    </p>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>Tab Parking</h2>
+                <div class="setting-item">
+                    <label for="tabThreshold">Show park button when tabs exceed</label>
+                    <input type="number" id="tabThreshold" class="number-input" min="5" max="50" value="10">
+                    <p class="setting-description">
+                        FocusFlow will suggest parking tabs when you have more than this number open.
+                    </p>
+                </div>
+
+                <div class="setting-item">
+                    <label for="inactiveMinutes">Consider tabs inactive after (minutes)</label>
+                    <input type="number" id="inactiveMinutes" class="number-input" min="5" max="120" value="30">
+                    <p class="setting-description">
+                        Tabs that haven't been viewed for this duration will be marked as inactive.
+                    </p>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>About</h2>
+                <div class="about-content">
+                    <p><strong>FocusFlow v1.0.0</strong></p>
+                    <p>Declutter any page, tame your tabs, and browse faster – one click.</p>
+                    <p class="about-links">
+                        <a href="#" id="resetSettings">Reset to defaults</a>
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+            <div id="saveStatus" class="save-status"></div>
+        </footer>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+
+</html>

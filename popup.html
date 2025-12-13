@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusFlow</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>🌊 FocusFlow</h1>
+      <p class="tagline">Calmer, cleaner browsing</p>
+    </header>
+
+    <main>
+      <!-- Page Declutter Section -->
+      <section class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon">🧹</div>
+          <div class="feature-info">
+            <h2>Page Declutter</h2>
+            <p class="feature-desc">Hide distractions on this page</p>
+          </div>
+        </div>
+        <div class="toggle-container">
+          <label class="toggle-switch">
+            <input type="checkbox" id="declutterToggle">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label" id="declutterStatus">Off</span>
+        </div>
+        <div class="declutter-stats" id="declutterStats"></div>
+      </section>
+
+      <!-- Tab Parking Section -->
+      <section class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon">🅿️</div>
+          <div class="feature-info">
+            <h2>Smart Tab Parking</h2>
+            <p class="feature-desc" id="tabCount">Loading tabs...</p>
+          </div>
+        </div>
+        <div class="button-group">
+          <button id="parkTabsBtn" class="btn btn-primary">
+            <span class="btn-icon">📦</span>
+            Park Inactive Tabs
+          </button>
+          <button id="restoreTabsBtn" class="btn btn-secondary">
+            <span class="btn-icon">↩️</span>
+            Restore Parked (<span id="parkedCount">0</span>)
+          </button>
+        </div>
+      </section>
+
+      <!-- Performance Badge Section -->
+      <section class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-info">
+            <h2>Performance</h2>
+            <p class="feature-desc">Page heaviness score</p>
+          </div>
+        </div>
+        <div class="perf-display">
+          <div class="perf-score" id="perfScore">
+            <span class="score-value" id="scoreValue">--</span>
+            <span class="score-label" id="scoreLabel">Analyzing...</span>
+          </div>
+          <div id="scriptsPausedStatus"
+            style="display: none; color: #48bb78; font-size: 12px; margin-top: 8px; text-align: center;">
+            ✓ Scripts paused
+          </div>
+          <div class="perf-actions">
+            <button id="pauseScriptsBtn" class="btn btn-small">Pause Heavy Scripts</button>
+            <button id="muteMediaBtn" class="btn btn-small">Mute Media</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <button id="openOptionsBtn" class="link-btn">⚙️ Settings</button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
