@@ -1,8 +1,8 @@
-# 🌊 FocusFlow - Chrome Extension
+# 🧹 Tab Manager & Performance Optimizer - Chrome Extension
 
 **Declutter any page, tame your tabs, and browse faster – one click.**
 
-FocusFlow is a Manifest V3 Chrome extension that makes browsing calmer and cleaner across any public website. It helps you focus on what matters by removing distractions, managing tabs intelligently, and monitoring page performance.
+Tab Manager & Performance Optimizer is a Manifest V3 Chrome extension that makes browsing calmer and cleaner across any public website. It helps you focus on what matters by removing distractions, managing tabs intelligently, and monitoring page performance.
 
 ## ✨ Features
 
@@ -42,7 +42,7 @@ FocusFlow is a Manifest V3 Chrome extension that makes browsing calmer and clean
 1. **Download or clone this repository**
    ```bash
    git clone <repository-url>
-   cd focusflow-extension
+   cd smart-page-cleaner
    ```
 
 2. **Open Chrome Extensions page**
@@ -55,35 +55,35 @@ FocusFlow is a Manifest V3 Chrome extension that makes browsing calmer and clean
 4. **Load the extension**
    - Click "Load unpacked"
    - Select the `extension` folder from this project
-   - The FocusFlow icon should appear in your toolbar
+   - The Tab Manager & Performance Optimizer icon should appear in your toolbar
 
 5. **Pin the extension (optional)**
    - Click the puzzle piece icon in Chrome toolbar
-   - Find FocusFlow and click the pin icon
+   - Find Tab Manager & Performance Optimizer and click the pin icon
 
 ## 📖 How to Use
 
 ### Page Declutter
 1. Navigate to any website
-2. Click the FocusFlow icon in your toolbar
+2. Click the Tab Manager & Performance Optimizer icon in your toolbar
 3. Toggle "Page Declutter" on
 4. Watch distractions disappear!
 5. Toggle off to restore the original page
 
 ### Tab Parking
 1. Open 10+ tabs in your browser
-2. Click the FocusFlow icon
+2. Click the Tab Manager & Performance Optimizer icon
 3. Click "Park Inactive Tabs" to save and close old tabs
 4. Click "Restore Parked" to bring them back anytime
 
 ### Performance Monitoring
 1. Open any webpage
-2. Click the FocusFlow icon
+2. Click the Tab Manager & Performance Optimizer icon
 3. View the performance score (0-100)
 4. Use "Pause Heavy Scripts" or "Mute Media" for faster browsing
 
 ### Settings
-1. Click the FocusFlow icon
+1. Click the Tab Manager & Performance Optimizer icon
 2. Click "⚙️ Settings" at the bottom
 3. Customize:
    - Declutter aggressiveness (Low/Medium/High)
@@ -92,7 +92,7 @@ FocusFlow is a Manifest V3 Chrome extension that makes browsing calmer and clean
 
 ## 🧪 Test Sites
 
-FocusFlow works great on these popular websites:
+Tab Manager & Performance Optimizer works great on these popular websites:
 
 1. **News Sites**
    - cnn.com - Removes sidebars and video players
@@ -163,7 +163,7 @@ extension/
 ## 🔧 Technical Details
 
 - **Manifest Version**: V3 (latest Chrome standard)
-- **Permissions**: activeTab, tabs, storage, sessions, scripting
+- **Permissions**: activeTab, tabs, storage, sessions, notifications
 - **Bundle Size**: <5KB (no external dependencies)
 - **Framework**: Vanilla JavaScript (no React/Vue/etc.)
 - **Styling**: Pure CSS with Grid/Flexbox

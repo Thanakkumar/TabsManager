@@ -1,4 +1,4 @@
-// Background service worker for FocusFlow extension
+// Background service worker for Tab Manager & Performance Optimizer extension
 
 // Constants
 const INACTIVE_THRESHOLD = 30 * 60 * 1000; // 30 minutes in milliseconds
@@ -6,7 +6,7 @@ const CHECK_INTERVAL = 5 * 60 * 1000; // Check every 5 minutes
 
 // Initialize on install
 chrome.runtime.onInstalled.addListener(() => {
-    console.log('FocusFlow installed');
+    console.log('Tab Manager & Performance Optimizer installed');
 
     // Set default settings
     chrome.storage.local.set({
@@ -21,7 +21,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Initialize on startup (every time service worker loads)
 chrome.runtime.onStartup.addListener(() => {
-    console.log('FocusFlow started');
+    console.log('Tab Manager & Performance Optimizer started');
     startTabMonitoring();
 });
 
@@ -93,9 +93,16 @@ async function startTabMonitoring() {
 
     await chrome.storage.local.set({ tabActivity: existingActivity });
 
-    // Periodic check for inactive tabs
-    setInterval(checkInactiveTabs, CHECK_INTERVAL);
+    // Periodic check for inactive tabs using Alarms (MV3 best practice)
+    chrome.alarms.create('checkInactiveTabs', { periodInMinutes: 5 });
 }
+
+// Handle alarm events
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === 'checkInactiveTabs') {
+        checkInactiveTabs();
+    }
+});
 
 // Check for inactive tabs
 async function checkInactiveTabs() {
@@ -133,7 +140,7 @@ async function checkInactiveTabs() {
         chrome.notifications.create('inactive-tabs', {
             type: 'basic',
             iconUrl: 'icons/icon128.png',
-            title: 'FocusFlow - Inactive Tabs Detected',
+            title: 'Tab Manager & Performance Optimizer - Inactive Tabs Detected',
             message: `You have ${inactiveCount} inactive tab${inactiveCount !== 1 ? 's' : ''}. Park them to free up memory?`,
             buttons: [
                 { title: 'Park Now' }
@@ -275,7 +282,7 @@ chrome.notifications.onButtonClicked.addListener(async (notificationId, buttonIn
         chrome.notifications.create({
             type: 'basic',
             iconUrl: 'icons/icon128.png',
-            title: 'FocusFlow',
+            title: 'Tab Manager & Performance Optimizer',
             message: `Parked ${count} inactive tab${count !== 1 ? 's' : ''}`,
             priority: 0
         });
@@ -304,7 +311,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
                         chrome.notifications.create(`heavy-page-${tabId}`, {
                             type: 'basic',
                             iconUrl: 'icons/icon128.png',
-                            title: `FocusFlow - ${response.label} Page Detected`,
+                            title: `Tab Manager & Performance Optimizer - ${response.label} Page Detected`,
                             message: `Performance score: ${response.score} (${response.label}). Scripts automatically paused to improve performance.`,
                             priority: response.score >= 70 ? 2 : 1,
                             requireInteraction: false

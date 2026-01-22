@@ -1,4 +1,4 @@
-// Popup script for FocusFlow extension
+// Popup script for Tab Manager & Performance Optimizer extension
 
 // DOM elements
 const declutterToggle = document.getElementById('declutterToggle');

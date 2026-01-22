@@ -1,4 +1,4 @@
-// Content script for FocusFlow extension
+// Content script for Tab Manager & Performance Optimizer extension
 
 // Common selectors for elements to hide
 const DECLUTTER_SELECTORS = [
@@ -88,8 +88,7 @@ const DECLUTTER_SELECTORS = [
 
 // State
 let declutterEnabled = false;
-let hiddenElements = [];
-let observer = null;
+let styleElement = null;
 
 // Initialize
 async function init() {
@@ -100,69 +99,36 @@ async function init() {
     if (declutterEnabled) {
         applyDeclutter();
     }
-
-    // Setup mutation observer for dynamic content
-    setupObserver();
 }
 
 // Apply declutter
 function applyDeclutter() {
-    const selector = DECLUTTER_SELECTORS.join(', ');
-    const elements = document.querySelectorAll(selector);
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = 'focusflow-declutter-styles';
+        const selectors = DECLUTTER_SELECTORS.join(',\n');
+        styleElement.textContent = `${selectors} { display: none !important; opacity: 0 !important; pointer-events: none !important; }`;
+        document.documentElement.appendChild(styleElement);
+    }
 
-    elements.forEach(element => {
-        if (!element.dataset.focusflowHidden) {
-            element.dataset.focusflowHidden = 'true';
-            element.dataset.focusflowOriginalDisplay = element.style.display;
-            element.style.display = 'none';
-            hiddenElements.push(element);
-        }
-    });
-
-    // Also hide autoplay videos
+    // Also mute autoplay videos and pause existing ones
     muteAutoplayVideos();
 }
 
 // Remove declutter
 function removeDeclutter() {
-    hiddenElements.forEach(element => {
-        if (element.dataset.focusflowHidden) {
-            element.style.display = element.dataset.focusflowOriginalDisplay || '';
-            delete element.dataset.focusflowHidden;
-            delete element.dataset.focusflowOriginalDisplay;
-        }
-    });
-    hiddenElements = [];
+    if (styleElement) {
+        styleElement.remove();
+        styleElement = null;
+    }
 }
 
-// Mute autoplay videos
+// Mute and pause autoplay videos
 function muteAutoplayVideos() {
     const videos = document.querySelectorAll('video[autoplay]');
     videos.forEach(video => {
         video.muted = true;
         video.pause();
-    });
-}
-
-// Setup mutation observer
-function setupObserver() {
-    if (observer) {
-        observer.disconnect();
-    }
-
-    observer = new MutationObserver((mutations) => {
-        if (declutterEnabled) {
-            // Debounce to avoid excessive processing
-            clearTimeout(observer.timeout);
-            observer.timeout = setTimeout(() => {
-                applyDeclutter();
-            }, 500);
-        }
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
     });
 }
 
@@ -218,7 +184,7 @@ function pauseHeavyScripts() {
     // Stop requestAnimationFrame
     window.requestAnimationFrame = function () { return 0; };
 
-    console.log('FocusFlow: Heavy scripts paused');
+    console.log('Tab Manager & Performance Optimizer: Heavy scripts paused');
 
     // Recalculate score after pausing (wait 1 second for changes to take effect)
     setTimeout(() => {

@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide - FocusFlow Extension
+# 🚀 Quick Start Guide - Tab Manager & Performance Optimizer Extension
 
 ## Installation Steps
 
@@ -17,33 +17,33 @@
 - Click "Select Folder"
 
 ### 4. Verify Installation
-- You should see "FocusFlow" in your extensions list
-- The FocusFlow icon should appear in your Chrome toolbar
-- If not visible, click the puzzle piece icon and pin FocusFlow
+- You should see "Tab Manager & Performance Optimizer" in your extensions list
+- The Tab Manager & Performance Optimizer icon should appear in your Chrome toolbar
+- If not visible, click the puzzle piece icon and pin Tab Manager & Performance Optimizer
 
 ## First Use
 
 ### Test Page Declutter
 1. Visit any news website (e.g., cnn.com, bbc.com)
-2. Click the FocusFlow icon in your toolbar
+2. Click the Tab Manager & Performance Optimizer icon in your toolbar
 3. Toggle "Page Declutter" ON
 4. Watch sidebars, ads, and cookie notices disappear!
 
 ### Test Tab Parking
 1. Open 10+ tabs in Chrome
 2. Wait a few minutes (or manually set some tabs as inactive)
-3. Click FocusFlow icon
+3. Click Tab Manager & Performance Optimizer icon
 4. Click "Park Inactive Tabs"
 5. Inactive tabs will be saved and closed
 
 ### Test Performance Monitor
 1. Visit any website
-2. Click FocusFlow icon
+2. Click Tab Manager & Performance Optimizer icon
 3. View the performance score (0-100)
 4. Try "Pause Heavy Scripts" or "Mute Media" buttons
 
 ## Customize Settings
-1. Click FocusFlow icon
+1. Click Tab Manager & Performance Optimizer icon
 2. Click "⚙️ Settings" at the bottom
 3. Adjust:
    - Declutter aggressiveness

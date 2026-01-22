@@ -1,4 +1,4 @@
-// Options page script for FocusFlow extension
+// Options page script for Tab Manager & Performance Optimizer extension
 
 // DOM elements
 const declutterAggressiveness = document.getElementById('declutterAggressiveness');
