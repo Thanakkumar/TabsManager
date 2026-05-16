@@ -1,13 +1,9 @@
 // Content script for Tab Manager & Performance Optimizer extension
 
-// Common selectors for elements to hide
-const DECLUTTER_SELECTORS = [
-    // Sidebars
-    'aside', '[class*="sidebar"]', '[id*="sidebar"]', '[class*="side-bar"]',
-    '[class*="rail"]', '[id*="rail"]',
-
+// Categories of selectors for different declutter levels
+const SELECTORS_LOW = [
     // Ads and banners - Basic
-    '[class*="ad-banner"]', '[class*="advertisement"]', '[id*="ad-"]',
+    '[class*="ad-banner"]', '[class*="advertisement"]', '[id^="ad-"]', '[id*="-ad-"]',
     '[class*="ad-container"]', '[class*="ad-wrapper"]', '[class*="ad-slot"]',
     '[class*="ad-unit"]', '[class*="ad-space"]', '[class*="ad-block"]',
     '.ad', '#ad', '[data-ad]', '[data-ad-slot]', '[data-ad-unit]',
@@ -33,11 +29,13 @@ const DECLUTTER_SELECTORS = [
     '[aria-label*="sponsor" i]', '[aria-label*="advertisement" i]',
     'article[class*="sponsor"]', 'div[class*="sponsor"]',
 
-    // Native ads
-    '[class*="native-ad"]', '[class*="native_ad"]',
-    '[class*="recommended"]', '[class*="recommendation"]',
-    '[class*="related-content"]', '[class*="you-may-like"]',
+    // Tracking pixels and beacons
+    'img[width="1"][height="1"]', 'img[style*="width:1px"]',
+    'iframe[width="1"][height="1"]', 'iframe[style*="width:1px"]',
 
+    // Interstitials
+    '[class*="interstitial"]', '[id*="interstitial"]',
+    
     // Cookie notices
     '[class*="cookie"]', '[id*="cookie"]', '[class*="gdpr"]', '[class*="consent"]',
     '[data-testid*="cookie"]', '[aria-label*="cookie" i]',
@@ -47,54 +45,64 @@ const DECLUTTER_SELECTORS = [
     // Popups and overlays
     '[class*="popup"]', '[class*="modal"]', '[class*="overlay"]',
     '[class*="lightbox"]', '[class*="dialog"]',
-    '[role="dialog"][class*="newsletter"]', '[role="dialog"][class*="subscribe"]',
+    '[role="dialog"][class*="newsletter"]', '[role="dialog"][class*="subscribe"]'
+];
 
+const SELECTORS_MEDIUM = [
+    ...SELECTORS_LOW,
     // Newsletter/Subscribe prompts
     '[class*="newsletter"]', '[class*="subscribe"]', '[class*="subscription"]',
     '[class*="email-capture"]', '[class*="signup"]', '[class*="sign-up"]',
     '[class*="join-us"]', '[class*="mailing-list"]',
 
-    // Autoplay videos (floating)
-    '[class*="floating-video"]', '[class*="sticky-video"]',
-    '[class*="video-player"][class*="sticky"]', '[class*="video-player"][class*="floating"]',
+    // App download prompts
+    '[class*="app-banner"]', '[class*="app-download"]', '[class*="download-app"]',
+    '[class*="mobile-app"]', '[class*="get-app"]', '[class*="install-app"]',
+
+    // Notification prompts
+    '[class*="notification-prompt"]', '[class*="push-notification"]',
+    '[class*="enable-notifications"]', '[class*="allow-notifications"]',
 
     // Social widgets
     '[class*="social-share"]', '[class*="share-buttons"]',
     '[class*="social-buttons"]', '[class*="share-bar"]',
     '[class*="social-media-share"]', '[class*="share-tools"]',
 
-    // Infinite scroll footers
-    '[class*="infinite-scroll"]', '[class*="load-more"]',
-
-    // Notification prompts
-    '[class*="notification-prompt"]', '[class*="push-notification"]',
-    '[class*="enable-notifications"]', '[class*="allow-notifications"]',
-
-    // App download prompts
-    '[class*="app-banner"]', '[class*="app-download"]', '[class*="download-app"]',
-    '[class*="mobile-app"]', '[class*="get-app"]', '[class*="install-app"]',
-
-    // Tracking pixels and beacons
-    'img[width="1"][height="1"]', 'img[style*="width:1px"]',
-    'iframe[width="1"][height="1"]', 'iframe[style*="width:1px"]',
-
-    // Interstitials
-    '[class*="interstitial"]', '[id*="interstitial"]',
-
     // Sticky headers/footers (often contain ads)
     '[class*="sticky-header"][class*="ad"]', '[class*="sticky-footer"][class*="ad"]',
     '[class*="fixed-banner"]', '[class*="sticky-banner"]'
 ];
 
+const SELECTORS_HIGH = [
+    ...SELECTORS_MEDIUM,
+    // Sidebars
+    'aside', '[class*="sidebar"]', '[id*="sidebar"]', '[class*="side-bar"]',
+    '[class*="rail"]', '[id*="rail"]',
+
+    // Native ads
+    '[class*="native-ad"]', '[class*="native_ad"]',
+    '[class*="recommended"]', '[class*="recommendation"]',
+    '[class*="related-content"]', '[class*="you-may-like"]',
+
+    // Autoplay videos (floating)
+    '[class*="floating-video"]', '[class*="sticky-video"]',
+    '[class*="video-player"][class*="sticky"]', '[class*="video-player"][class*="floating"]',
+
+    // Infinite scroll footers
+    '[class*="infinite-scroll"]', '[class*="load-more"]'
+];
+
 // State
 let declutterEnabled = false;
+let declutterAggressiveness = 'medium';
 let styleElement = null;
 
 // Initialize
 async function init() {
-    // Check if declutter is enabled globally
-    const result = await chrome.storage.local.get(['declutterGlobalEnabled']);
+    // Check if declutter is enabled globally and get aggressiveness
+    const result = await chrome.storage.local.get(['declutterGlobalEnabled', 'declutterAggressiveness']);
     declutterEnabled = result.declutterGlobalEnabled || false;
+    declutterAggressiveness = result.declutterAggressiveness || 'medium';
 
     if (declutterEnabled) {
         applyDeclutter();
@@ -106,8 +114,15 @@ function applyDeclutter() {
     if (!styleElement) {
         styleElement = document.createElement('style');
         styleElement.id = 'focusflow-declutter-styles';
-        const selectors = DECLUTTER_SELECTORS.join(',\n');
-        styleElement.textContent = `${selectors} { display: none !important; opacity: 0 !important; pointer-events: none !important; }`;
+        
+        let selectors = SELECTORS_MEDIUM;
+        if (declutterAggressiveness === 'low') {
+            selectors = SELECTORS_LOW;
+        } else if (declutterAggressiveness === 'high') {
+            selectors = SELECTORS_HIGH;
+        }
+        
+        styleElement.textContent = `${selectors.join(',\n')} { display: none !important; opacity: 0 !important; pointer-events: none !important; }`;
         document.documentElement.appendChild(styleElement);
     }
 
